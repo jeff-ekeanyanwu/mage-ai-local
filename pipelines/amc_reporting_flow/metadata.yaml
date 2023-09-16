@@ -11,7 +11,7 @@ blocks:
   language: python
   name: amc_metadata_authentication
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks: []
@@ -41,7 +41,7 @@ blocks:
   type: transformer
   upstream_blocks: []
   uuid: query_to_run_in_amc
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     dynamic: true
@@ -60,7 +60,7 @@ blocks:
   upstream_blocks:
   - amc_metadata_authentication
   uuid: amc_all_instance_dict
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     file_path: null
@@ -111,6 +111,6 @@ run_pipeline_in_one_process: false
 spark_config: {}
 tags: []
 type: python
-updated_at: '2023-09-14 20:37:58'
+updated_at: '2023-09-16 20:35:51'
 uuid: amc_reporting_flow
 widgets: []
