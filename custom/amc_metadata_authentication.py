@@ -14,7 +14,7 @@ def get_access_token():
 
     # Note: You need to have the yaml file with the tokens on it to run this if you are not running it here
 
-    full_file_path = r"/home/secrets/secrets.yaml"
+    full_file_path = r"/home/src/default_repo/secrets/secrets.yaml"
     with open(full_file_path) as settings:
         settings_data = yaml.load(settings, Loader=yaml.Loader)
 
