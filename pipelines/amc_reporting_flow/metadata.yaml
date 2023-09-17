@@ -23,7 +23,7 @@ blocks:
     data_provider_database: perpetua-data-buffer-144
     data_provider_profile: default
     data_provider_schema: amc
-    data_provider_table: amc_advertiser_list
+    data_provider_table: ''
     dbt: {}
     export_write_policy: replace
     file_path: null
@@ -111,6 +111,6 @@ run_pipeline_in_one_process: false
 spark_config: {}
 tags: []
 type: python
-updated_at: '2023-09-16 20:48:08'
+updated_at: '2023-09-17 04:12:34'
 uuid: amc_reporting_flow
 widgets: []
