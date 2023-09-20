@@ -1,0 +1,53 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - delicate_fire
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: yaml
+  name: dawn pond
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: dawn_pond
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: yaml
+  name: delicate fire
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - dawn_pond
+  uuid: delicate_fire
+callbacks: []
+concurrency_config: {}
+conditionals: []
+created_at: '2023-09-20 17:41:26.244988+00:00'
+data_integration: null
+description: null
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
+name: polished thunder
+notification_config: {}
+retry_config: {}
+run_pipeline_in_one_process: false
+spark_config: {}
+tags: []
+type: integration
+updated_at: '2023-09-20 17:42:24'
+uuid: polished_thunder
+widgets: []
