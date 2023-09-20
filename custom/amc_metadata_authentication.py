@@ -36,10 +36,9 @@ def get_access_token():
         post_objects)
 
     json_formatted_str = json.dumps(r.json(), indent=2)
-    p_access_token = r.json().get("access_token")
-    return p_access_token
+    access_token = r.json().get("access_token")
+    return access_token
 
-access_token = get_access_token()
 
 @test
 def test_output(output, *args) -> None:

@@ -1,4 +1,7 @@
 import io
+import random
+import string
+from typing import Dict, List
 import pandas as pd
 import json
 import requests
@@ -9,10 +12,13 @@ if 'test' not in globals():
 
 
 @data_loader
-def load_data_from_api(access_token, *args, **kwargs):
+def load_data_from_api(access_token, data_2, *args, **kwargs) -> List[List[Dict]]:
     """
     Template for loading data from API
     """
+    sql_query = data_2[0]
+    query_name = data_2[1]
+   
 
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
                     'Amazon-Advertising-API-MarketplaceId': 'ATVPDKIKX0DER',
@@ -51,18 +57,12 @@ def load_data_from_api(access_token, *args, **kwargs):
         customerName.append(safe_string_3)
         apiEndpoint.append(instance_search[i]["apiEndpoint"])
 
-
-
-    amc_instance_dict = {customerName[i]: instanceId[i] for i in range(len(customerName))}  
-    del amc_instance_dict['Perpetua_Sandbox'] # get rid of this now
-    amc_instance_dict_flipped = {instanceId[i]: customerName[i] for i in range(len(instanceId))}
-
-    def convert(dictionary):
-        for value in dictionary.items():
-            return [{key: value} for key, value in dictionary.items()]
     
-    amc_dynamic_dict = list(convert(amc_instance_dict))
-    return amc_dynamic_dict
+    amc_instance_dict = []
+    for i in range(len(customerName)):
+        amc_instance_dict.append({"customer_name": customerName[i], "instanceId": instanceId[i], "sql_query": sql_query, "query_name": query_name, "access_token": access_token })
+
+    return [amc_instance_dict]
 
 
 @test
