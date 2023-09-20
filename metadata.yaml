@@ -50,4 +50,5 @@ project_uuid: 044d98b506724ca18d0b4174e0d8cc2f
 help_improve_mage: true
 features:
   add_new_block_v2: false
-openai_api_key: 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
+  display_local_timezone: true
+openai_api_key: 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

@@ -1,0 +1,3 @@
+This python script defines a function called transform_custom which takes in two arguments, data and *args, **kwargs. It then sets up a header_staple dictionary with the necessary parameters for the request. It then makes a request to the specified url and checks the workflow status. If the workflow status is still running or pending, it will wait 400 seconds and check again. If the workflow status is successful, it will grab the downloadUrls. Finally, it returns the data. 
+
+The test_output function is used to test the output of the block. It checks that the output is not undefined.

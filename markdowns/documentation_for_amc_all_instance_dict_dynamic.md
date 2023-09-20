@@ -1,0 +1,5 @@
+This python script is used to load data from an API. It takes in an access token, data_2, and optional arguments and keyword arguments as inputs. It returns a list of dictionaries containing customer name, instanceId, sql query, query name, and access token as outputs. 
+
+The script begins by importing necessary libraries and decorators. It then defines a function called load_data_from_api which takes in the access token, data_2, and optional arguments and keyword arguments as inputs. It sets up the header staple for the request and creates empty lists for customerName, apiEndpoint, instanceId, and amc_dict. It then iterates through the instances in the data and appends the customer name, apiEndpoint, and instanceId to the respective lists. It then creates a dictionary containing the customer name, instanceId, sql query, query name, and access token and appends it to the list of instances info. Finally, it returns the list of dictionaries. 
+
+The script also defines a test function called test_output which takes in the output and optional arguments as inputs. It then asserts that the output is not None.
