@@ -1,3 +1,12 @@
+import time
+from typing import Dict, List
+import io
+import pandas as pd
+import requests
+import json
+from time import sleep
+from random import randint
+
 if 'custom' not in globals():
     from mage_ai.data_preparation.decorators import custom
 if 'test' not in globals():
@@ -14,6 +23,11 @@ def transform_custom(data, *args, **kwargs):
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
+
+    # Sleep a random number of seconds (between 20 and 70) for rate limiting???
+    #sleep(randint(20,70))
+
+
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
                  'Amazon-Advertising-API-MarketplaceId': 'ATVPDKIKX0DER',
                  'instanceId': 'amcl5g0tpcp',
@@ -21,24 +35,59 @@ def transform_custom(data, *args, **kwargs):
                 'Amazon-Advertising-API-AdvertiserId':'ENTITY2M6J5JPS44Y4R',
                 'Authorization': f"Bearer {data['access_token']}"}
 
-    url = f'https://advertising-api.amazon.com/amc/reporting/{instance_id_clean}/workflowExecutions/{workflowexecution_id}'
+    url = f"https://advertising-api.amazon.com/amc/reporting/{data['instanceId']}/workflowExecutions/{data['workflowExecutionId']}"
     r = requests.get(
         url,
         headers=header_staple,
     )
+    logger = kwargs.get('logger')
+
     try:
-                workflow_status = json.loads(await resp.read())
-                if workflow_status['status'] in {"PENDING", "RUNNING"}:
-                    print(f'Checking workflow status for {instance_id_with_sql}...still running/pending.')
-                    await asyncio.sleep(400)
-                    return await check_for_report(workflowexecution_id, instance_id_with_sql)
-                elif workflow_status['status'] in {"SUCCEEDED"}: # grab downloadUrls here
-                    print(f'workflow status success for {instance_id_with_sql} Uploading to bucket.')
-                    url_dl = f'https://advertising-api.amazon.com/amc/reporting/{instance_id_clean}/workflowExecutions/{workflowexecution_id}/downloadUrls'
-
-
-    return data
-
+        if r.status_code == 200:
+            workflow_status = r.json().get("status")
+            while workflow_status in {"PENDING", "RUNNING"}:
+                print(f"Checking workflow status for {data['full_workflow_name']}...still running/pending.")
+                time.sleep(200)
+                r = requests.get(url, headers=header_staple)
+                workflow_status = r.json().get("status")
+                if workflow_status in {"CANCELLED"}:
+                    print(f"Workflow fatally cancelled for {data['full_workflow_name']}. Please investigate.")
+                    data['retrieve_workflow_status'] = "failed"
+                    raise Exception
+                if workflow_status in {"SUCCEEDED"}:
+                    print(f"workflow status success for {data['full_workflow_name']} Uploading to BigQuery.")
+                    data['retrieve_workflow_status'] = "success"
+                    url_dl = f"https://advertising-api.amazon.com/amc/reporting/{data['instanceId']}/workflowExecutions/{data['workflowExecutionId']}/downloadUrls"
+                    r = requests.get(url_dl, headers=header_staple)
+                    download_url = r.json()["downloadUrls"][0]
+                    try:
+                        df = pd.read_csv(download_url,on_bad_lines='error')
+                        return df
+                    except:
+                        print(f"{kwargs['customer_name']} has no values to return! OR there is an error in this csv! Ending pipeline gracefully.")
+                        df = pd.DataFrame()
+                        return df
+            if workflow_status in {"CANCELLED"}:
+                    print(f"Workflow fatally cancelled for {data['full_workflow_name']}. Please investigate.")
+                    data['retrieve_workflow_status'] = "failed"
+                    raise Exception
+            if workflow_status in {"SUCCEEDED"}:
+                    print(f"workflow status success for {data['full_workflow_name']} Uploading to BigQuery.")
+                    data['retrieve_workflow_status'] = "success"
+                    url_dl = f"https://advertising-api.amazon.com/amc/reporting/{data['instanceId']}/workflowExecutions/{data['workflowExecutionId']}/downloadUrls"
+                    r = requests.get(url_dl, headers=header_staple)
+                    download_url = r.json()["downloadUrls"][0]
+                    try:
+                        df = pd.read_csv(download_url,on_bad_lines='error')
+                        return df
+                    except:
+                        print(f"{kwargs['customer_name']} has no values to return! OR there is an error in this csv! Ending pipeline gracefully.")
+                        df = pd.DataFrame()
+                        return df
+            
+            
+    except AttributeError:
+       logger.error(f"{r.status_code} for {data['full_workflow_name']}. Please retry. {r.text}" )
 
 @test
 def test_output(output, *args) -> None:

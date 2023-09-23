@@ -2,7 +2,10 @@ from typing import Dict, List
 import io
 import pandas as pd
 import requests
+from time import sleep
+from random import randint
 
+sleep(randint(1,5))
 if 'custom' not in globals():
     from mage_ai.data_preparation.decorators import custom
 if 'test' not in globals():
@@ -12,6 +15,10 @@ if 'test' not in globals():
 
 @custom
 def create_workflow(data, *args, **kwargs):
+
+    # Sleep a random number of seconds (between 20 and 100) for rate limiting
+    # sleep(randint(20,70))
+    #logger = kwargs.get('logger')
 
             
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
@@ -40,15 +47,17 @@ def create_workflow(data, *args, **kwargs):
         headers=header_staple)
 
     if r.status_code == 200:
-        print(f"{data['full_workflow_name']} - Workflow creation failed. Retrying.")
+        #logger.info(f"{data['full_workflow_name']} - Workflow creation success.")
         return data
         
         
-    if r.status_code in {504, 503, 502, 500, 400}:
-        print(r.json())
-        print(f"{data['full_workflow_name']} - Workflow creation failed. Retrying.")
+    if r.status_code in {504, 503, 502, 500}:
+        #logger.warning("{r.status_code} - {data['full_workflow_name']} - Workflow creation failed. Retrying. {r.text}")
         raise Exception
         
+    if r.status_code in {400}:
+        #logger.info(f"{data['full_workflow_name']} - Workflow likely already exists. Continuing. {r.text}")
+        return data
 
 
 @test

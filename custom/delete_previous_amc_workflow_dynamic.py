@@ -5,6 +5,8 @@ from typing import Dict, List
 import pandas as pd
 import json
 import requests
+from time import sleep
+from random import randint
 
 if 'custom' not in globals():
     from mage_ai.data_preparation.decorators import custom
@@ -14,6 +16,7 @@ if 'test' not in globals():
 
 @custom
 def delete_workflow(data, *args, **kwargs):
+    
     """
     Args:
         data: The output from the upstream parent block (if applicable)
@@ -22,7 +25,10 @@ def delete_workflow(data, *args, **kwargs):
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
-    # Specify your custom logic here
+    #logger = kwargs.get('logger')
+
+    # Sleep a random number of seconds (between 20 and 70) for rate limiting
+
 
     instanceId = data['instanceId']
     customer_name = data['customer_name']
@@ -44,19 +50,17 @@ def delete_workflow(data, *args, **kwargs):
         headers=header_staple,
     )
     if r.status_code == 200: # this is because it would appear that the DELETE request returns no response when 200
-        print(f'Workflow <{full_workflow_name}> deleted successfully. Proceeding with workflow create.')
+        #logger.info(f"Workflow <{full_workflow_name}> deleted successfully. Proceeding with workflow create.")
         data['full_workflow_name'] = full_workflow_name
         return data
     
-    if r.status_code in {504, 503, 502, 500}:
-        print(r.json())
-        print(f'Error deleting workflow <{full_workflow_name}>. Attempting to proceed with workflow create.')
+    if r.status_code in {504, 503, 502, 500, 429, 423}:
+        #logger.warning(f"Error deleting workflow <{full_workflow_name}>. Attempting to retry: {r.text}")
         data['full_workflow_name'] = full_workflow_name
-        return data
+        raise Exception
 
-    else: # totally fine to error here, just means it's the first time creating the workflow in most cases
-        print(r.json())
-        print(f'Error deleting workflow <{full_workflow_name}>. Attempting to proceed with workflow create.')
+    if r.status_code == 400: # totally fine to error here, just means it's the first time creating the workflow in most cases
+        #logger.warning(f'Error deleting workflow <{full_workflow_name}>. Attempting to proceed with workflow create: {r.text}')
         data['full_workflow_name'] = full_workflow_name
         return data
 

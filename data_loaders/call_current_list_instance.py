@@ -6,20 +6,18 @@ import pandas as pd
 import json
 import requests
 
+
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
 if 'test' not in globals():
     from mage_ai.data_preparation.decorators import test
 
 
-
 @data_loader
-def load_data_from_api(access_token, data_2, *args, **kwargs) -> List[List[Dict]]:
+def load_data_from_api(access_token, *args, **kwargs) -> List[List[Dict]]:
     """
     Template for loading data from API
     """
-    sql_query = data_2[0]
-    query_name = data_2[1]
    
 
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
@@ -60,17 +58,9 @@ def load_data_from_api(access_token, data_2, *args, **kwargs) -> List[List[Dict]
         apiEndpoint.append(instance_search[i]["apiEndpoint"])
 
 
-    AWS_HOSTS_DICT_2 = {customerName[i]: instanceId[i] for i in range(len(customerName))}  
-    del AWS_HOSTS_DICT_2['Perpetua_Sandbox'] # get rid of this now
+    amc_instance_list = {customerName[i]: instanceId[i] for i in range(len(customerName))}  
+    del amc_instance_list['Perpetua_Sandbox'] # get rid of this now
     AWS_HOSTS_DICT_flipped = {instanceId[i]: customerName[i] for i in range(len(instanceId))}
         
 
-    return AWS_HOSTS_DICT_2
-
-
-@test
-def test_output(output, *args) -> None:
-    """
-    Template code for testing the output of the block.
-    """
-    assert output is not None, 'The output is undefined'
+    return amc_instance_list

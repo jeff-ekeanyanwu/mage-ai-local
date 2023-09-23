@@ -105,7 +105,7 @@ blocks:
   language: python
   name: amc_all_instance_dict_dynamic
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_loader
   upstream_blocks:
@@ -127,7 +127,7 @@ blocks:
   type: markdown
   upstream_blocks: []
   uuid: documentation_for_delete_previous_amc_workflow_dynamic
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: blue
   configuration:
     reduce_output: false
@@ -139,7 +139,7 @@ blocks:
   language: python
   name: delete_previous_amc_workflow_dynamic
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks:
@@ -175,7 +175,7 @@ blocks:
     delay: 10
     exponential_backoff: true
     max_delay: 20
-    retries: 3
+    retries: 5
   status: updated
   timeout: null
   type: custom
@@ -207,8 +207,12 @@ blocks:
   has_callback: false
   language: python
   name: amc_execute_adhoc_workflow_dynamic
-  retry_config: null
-  status: executed
+  retry_config:
+    delay: 5
+    exponential_backoff: true
+    max_delay: 30
+    retries: 3
+  status: updated
   timeout: null
   type: custom
   upstream_blocks:
@@ -233,19 +237,62 @@ blocks:
   color: teal
   configuration:
     file_path: null
-  downstream_blocks: []
+    reduce_output: 'true'
+  downstream_blocks:
+  - remove_empty_entity
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: amc_retrieve_workflow_download_dynamic
-  retry_config: null
+  retry_config:
+    delay: 5
+    exponential_backoff: true
+    max_delay: 25
+    retries: 3
   status: updated
   timeout: null
   type: custom
   upstream_blocks:
   - amc_execute_adhoc_workflow_dynamic
   uuid: amc_retrieve_workflow_download_dynamic
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - bq_export_cst
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: remove_empty_entity
+  retry_config:
+    delay: 5
+    exponential_backoff: true
+    max_delay: 15
+    retries: 2
+  status: executed
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - amc_retrieve_workflow_download_dynamic
+  uuid: remove_empty_entity
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: bq_export_cst
+  retry_config: null
+  status: failed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - remove_empty_entity
+  uuid: bq_export_cst
 callbacks: []
 concurrency_config: {}
 conditionals:
@@ -280,15 +327,19 @@ description: This python script is used to create a data pipeline for Amazon Adv
   functions to test the output of each block.
 executor_config: {}
 executor_count: 1
-executor_type: null
+executor_type: local_python
 extensions: {}
 name: customer_search_term_sa
 notification_config: {}
-retry_config: {}
+retry_config:
+  delay: 30
+  exponential_backoff: true
+  max_delay: 120
+  retries: 5
 run_pipeline_in_one_process: false
 spark_config: {}
 tags: []
 type: python
-updated_at: '2023-09-20 21:40:31'
+updated_at: '2023-09-22 04:21:23'
 uuid: customer_search_term_sa
 widgets: []

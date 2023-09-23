@@ -2,6 +2,8 @@ from typing import Dict, List
 import io
 import pandas as pd
 import requests
+from time import sleep
+from random import randint
 
 if 'custom' not in globals():
     from mage_ai.data_preparation.decorators import custom
@@ -11,6 +13,12 @@ if 'test' not in globals():
 
 @custom
 def execute_workflow(data, *args, **kwargs):
+
+
+    # Sleep a random number of seconds (between 20 and 100) for rate limiting
+    #sleep(randint(20,70))
+
+    logger = kwargs.get('logger')
     
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
                  'Amazon-Advertising-API-MarketplaceId': 'ATVPDKIKX0DER',
@@ -23,8 +31,8 @@ def execute_workflow(data, *args, **kwargs):
     post_data = {
         'workflowId': f"{data['full_workflow_name']}",
         'timeWindowType': "EXPLICIT",
-        'timeWindowStart': "2023-08-01T00:00:00", # in mage variable from Aug 1 to Sept 1
-        'timeWindowEnd': "2023-09-01T00:00:00", # in mage variable from Aug 1 to Sept 1
+        'timeWindowStart': kwargs['query_start_date'], # in mage variable from Aug 1 to Sept 1
+        'timeWindowEnd': kwargs['query_end_date'], # in mage variable from Aug 1 to Sept 1
         "ignoreDataGaps": "true",
         "parameterValues": {
             "Advertiser": data['customer_name']
@@ -37,18 +45,27 @@ def execute_workflow(data, *args, **kwargs):
         headers=header_staple,
     )
 
+
     if r.status_code == 200:
-        print(r.text)
-        print(f"Workflow <{data['full_workflow_name']}> executed successfully. Proceeding with workflow retrieve.")
+        #logger.info(f"Workflow <{data['full_workflow_name']}> executed successfully. Proceeding with workflow retrieve: {r.text}")
         workflowExecutionId = r.json()['workflowExecutionId']
         data['workflowExecutionId'] = workflowExecutionId
         return data
 
-    if r.status_code in {504, 503, 502, 500, 400}:
-        print(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate.")
-        #to do - find out how to log in mage
-        return data
-       
+    if r.status_code in {504, 503, 502, 500}:
+        logger.warning(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
+        raise Exception
+    
+    if r.status_code == 400:
+        
+        logger.warning(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
+        try:
+            workflowExecutionId = r.json()['workflowExecutionId']
+            data['workflowExecutionId'] = workflowExecutionId
+            return data
+        except:
+            logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
+            raise Exception
 
 @test
 def test_output(output, *args) -> None:
