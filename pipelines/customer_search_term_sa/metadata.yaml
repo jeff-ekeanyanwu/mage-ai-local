@@ -340,6 +340,6 @@ run_pipeline_in_one_process: false
 spark_config: {}
 tags: []
 type: python
-updated_at: '2023-09-22 04:21:23'
+updated_at: '2023-09-23 19:08:34'
 uuid: customer_search_term_sa
 widgets: []

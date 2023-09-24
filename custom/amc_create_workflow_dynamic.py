@@ -5,7 +5,6 @@ import requests
 from time import sleep
 from random import randint
 
-sleep(randint(1,5))
 if 'custom' not in globals():
     from mage_ai.data_preparation.decorators import custom
 if 'test' not in globals():
@@ -18,7 +17,8 @@ def create_workflow(data, *args, **kwargs):
 
     # Sleep a random number of seconds (between 20 and 100) for rate limiting
     # sleep(randint(20,70))
-    #logger = kwargs.get('logger')
+    logger = kwargs.get('logger')
+    sleep(randint(1,5))
 
             
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
@@ -47,16 +47,20 @@ def create_workflow(data, *args, **kwargs):
         headers=header_staple)
 
     if r.status_code == 200:
-        #logger.info(f"{data['full_workflow_name']} - Workflow creation success.")
+        logger.info(f"{data['full_workflow_name']} - Workflow creation success.")
         return data
         
         
     if r.status_code in {504, 503, 502, 500}:
-        #logger.warning("{r.status_code} - {data['full_workflow_name']} - Workflow creation failed. Retrying. {r.text}")
-        raise Exception
+        logger.warning(f"{r.status_code} - {data['full_workflow_name']} - Workflow creation failed. Retrying. {r.text}")
+        try:
+            return data
+        except Exception as e:
+            logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
+            raise Exception
         
     if r.status_code in {400}:
-        #logger.info(f"{data['full_workflow_name']} - Workflow likely already exists. Continuing. {r.text}")
+        logger.info(f"{data['full_workflow_name']} - Workflow likely already exists. Continuing. {r.text}")
         return data
 
 

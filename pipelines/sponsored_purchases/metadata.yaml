@@ -8,13 +8,13 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: sql_query_template
+  name: sponsored_purchases
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: custom
   upstream_blocks: []
-  uuid: sql_query_template
+  uuid: sponsored_purchases
 - all_upstream_blocks_executed: true
   color: teal
   configuration:
@@ -32,7 +32,7 @@ blocks:
   type: custom
   upstream_blocks: []
   uuid: amc_metadata_authentication
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: pink
   configuration: {}
   downstream_blocks:
@@ -48,9 +48,9 @@ blocks:
   type: custom
   upstream_blocks:
   - amc_metadata_authentication
-  - sql_query_template
+  - sponsored_purchases
   uuid: create_amc_dict_global
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: teal
   configuration:
     file_path: null
@@ -68,7 +68,7 @@ blocks:
   upstream_blocks:
   - create_amc_dict_global
   uuid: delete_previous_amc_workflow_dynamic
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: teal
   configuration:
     file_path: null
@@ -109,14 +109,14 @@ blocks:
   configuration:
     file_path: null
   downstream_blocks:
-  - remove_empty_entity
+  - export_to_gcs_sponsored_purchases
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: amc_retrieve_workflow_download_dynamic
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: custom
   upstream_blocks:
@@ -124,39 +124,20 @@ blocks:
   uuid: amc_retrieve_workflow_download_dynamic
 - all_upstream_blocks_executed: false
   color: null
-  configuration:
-    file_path: null
-  downstream_blocks:
-  - export_to_gcs_template
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: remove_empty_entity
-  retry_config: null
-  status: updated
-  timeout: null
-  type: transformer
-  upstream_blocks:
-  - amc_retrieve_workflow_download_dynamic
-  uuid: remove_empty_entity
-- all_upstream_blocks_executed: false
-  color: null
-  configuration:
-    file_path: null
+  configuration: {}
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: export_to_gcs_template
+  name: export_to_gcs_sponsored_purchases
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
-  - remove_empty_entity
-  uuid: export_to_gcs_template
+  - amc_retrieve_workflow_download_dynamic
+  uuid: export_to_gcs_sponsored_purchases
 callbacks: []
 concurrency_config: {}
 conditionals:
@@ -197,7 +178,7 @@ executor_config: {}
 executor_count: 1
 executor_type: null
 extensions: {}
-name: amc_query_master_template
+name: sponsored_purchases
 notification_config: {}
 retry_config:
   delay: 30
@@ -208,9 +189,10 @@ run_pipeline_in_one_process: false
 spark_config: {}
 tags:
 - amc
+- sponsored_purchases
 type: python
-updated_at: '2023-09-23 18:23:03'
-uuid: amc_query_master_template
+updated_at: '2023-09-23 19:19:46'
+uuid: sponsored_purchases
 variables:
   customer_name: Crocs_US
   instanceId: amcl5g0tpcp

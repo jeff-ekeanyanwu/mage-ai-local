@@ -80,13 +80,13 @@ blocks:
   language: python
   name: amc_create_workflow_dynamic
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks:
   - delete_previous_amc_workflow_dynamic
   uuid: amc_create_workflow_dynamic
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: teal
   configuration:
     file_path: null
@@ -98,13 +98,13 @@ blocks:
   language: python
   name: amc_execute_adhoc_workflow_dynamic
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: custom
   upstream_blocks:
   - amc_create_workflow_dynamic
   uuid: amc_execute_adhoc_workflow_dynamic
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: teal
   configuration:
     file_path: null
@@ -191,7 +191,7 @@ tags:
 - amc
 - bof_purchases
 type: python
-updated_at: '2023-09-23 01:02:14'
+updated_at: '2023-09-23 18:29:17'
 uuid: bof_purchases
 variables:
   customer_name: Crocs_US

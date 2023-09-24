@@ -18,7 +18,8 @@ blocks:
   uuid: amc_metadata_authentication
 - all_upstream_blocks_executed: true
   color: null
-  configuration: {}
+  configuration:
+    dynamic: true
   downstream_blocks:
   - amc_pipeline_batch_run
   executor_config: null
@@ -43,7 +44,7 @@ blocks:
   language: python
   name: amc_pipeline_batch_run
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: data_exporter
   upstream_blocks:
@@ -66,6 +67,10 @@ run_pipeline_in_one_process: false
 spark_config: {}
 tags: []
 type: python
-updated_at: '2023-09-23 01:03:54'
+updated_at: '2023-09-23 19:08:53'
 uuid: all_amc_pipeline_run
+variables:
+  pipeline_name: sponsored_purchases
+  time_window_end: '2023-06-30T00:00:00'
+  time_window_start: '2023-04-01T00:00:00'
 widgets: []

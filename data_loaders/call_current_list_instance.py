@@ -57,10 +57,12 @@ def load_data_from_api(access_token, *args, **kwargs) -> List[List[Dict]]:
         customerName.append(safe_string_3)
         apiEndpoint.append(instance_search[i]["apiEndpoint"])
 
+    amc_instance_dict = []
+    metadata = []
 
-    amc_instance_list = {customerName[i]: instanceId[i] for i in range(len(customerName))}  
-    del amc_instance_list['Perpetua_Sandbox'] # get rid of this now
-    AWS_HOSTS_DICT_flipped = {instanceId[i]: customerName[i] for i in range(len(instanceId))}
+    for i in range(len(customerName)):
+        amc_instance_dict.append({"customer_name": customerName[i], "instanceId": instanceId[i]})
+        metadata.append({"block_uuid": customerName[i]})
         
 
-    return amc_instance_list
+    return [amc_instance_dict, metadata]

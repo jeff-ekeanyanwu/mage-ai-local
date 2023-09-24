@@ -25,7 +25,7 @@ def delete_workflow(data, *args, **kwargs):
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
-    #logger = kwargs.get('logger')
+    logger = kwargs.get('logger')
 
     # Sleep a random number of seconds (between 20 and 70) for rate limiting
 
@@ -33,7 +33,7 @@ def delete_workflow(data, *args, **kwargs):
     instanceId = data['instanceId']
     customer_name = data['customer_name']
 
-    full_workflow_name = str(data['customer_name'])+str(data['query_name'])
+    full_workflow_name = f"{data['customer_name']}_{data['query_name']}"
     
     header_staple = {'Content-Type': 'application/x-amz.json-1.1',
                  'Amazon-Advertising-API-MarketplaceId': 'ATVPDKIKX0DER',
@@ -50,17 +50,17 @@ def delete_workflow(data, *args, **kwargs):
         headers=header_staple,
     )
     if r.status_code == 200: # this is because it would appear that the DELETE request returns no response when 200
-        #logger.info(f"Workflow <{full_workflow_name}> deleted successfully. Proceeding with workflow create.")
+        logger.info(f"Workflow <{full_workflow_name}> deleted successfully. Proceeding with workflow create.")
         data['full_workflow_name'] = full_workflow_name
         return data
     
     if r.status_code in {504, 503, 502, 500, 429, 423}:
-        #logger.warning(f"Error deleting workflow <{full_workflow_name}>. Attempting to retry: {r.text}")
+        logger.warning(f"Error deleting workflow <{full_workflow_name}>. Attempting to retry: {r.text}")
         data['full_workflow_name'] = full_workflow_name
         raise Exception
 
     if r.status_code == 400: # totally fine to error here, just means it's the first time creating the workflow in most cases
-        #logger.warning(f'Error deleting workflow <{full_workflow_name}>. Attempting to proceed with workflow create: {r.text}')
+        logger.warning(f'Error deleting workflow <{full_workflow_name}>. Attempting to proceed with workflow create: {r.text}')
         data['full_workflow_name'] = full_workflow_name
         return data
 

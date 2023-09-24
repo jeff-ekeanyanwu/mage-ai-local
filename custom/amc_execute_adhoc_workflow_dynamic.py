@@ -47,14 +47,19 @@ def execute_workflow(data, *args, **kwargs):
 
 
     if r.status_code == 200:
-        #logger.info(f"Workflow <{data['full_workflow_name']}> executed successfully. Proceeding with workflow retrieve: {r.text}")
+        logger.info(f"Workflow <{data['full_workflow_name']}> executed successfully. Proceeding with workflow retrieve: {r.text}")
         workflowExecutionId = r.json()['workflowExecutionId']
         data['workflowExecutionId'] = workflowExecutionId
         return data
 
     if r.status_code in {504, 503, 502, 500}:
-        logger.warning(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
-        raise Exception
+        try:
+            workflowExecutionId = r.json()['workflowExecutionId']
+            data['workflowExecutionId'] = workflowExecutionId
+            return data
+        except Exception as e:
+            logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
+            raise Exception
     
     if r.status_code == 400:
         
@@ -63,7 +68,7 @@ def execute_workflow(data, *args, **kwargs):
             workflowExecutionId = r.json()['workflowExecutionId']
             data['workflowExecutionId'] = workflowExecutionId
             return data
-        except:
+        except Exception as e:
             logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
             raise Exception
 
