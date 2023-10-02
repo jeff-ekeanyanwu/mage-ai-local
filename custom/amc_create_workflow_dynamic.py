@@ -54,7 +54,17 @@ def create_workflow(data, *args, **kwargs):
     if r.status_code in {504, 503, 502, 500}:
         logger.warning(f"{r.status_code} - {data['full_workflow_name']} - Workflow creation failed. Retrying. {r.text}")
         try:
-            return data
+            sleep(600)
+            r = requests.post(
+            workflows_url, 
+            json=post_data, 
+            headers=header_staple)
+
+            if r.status_code == 200:
+                return data
+            else:
+                logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status (internal server error). Please investigate. {r.text}")
+                raise Exception
         except Exception as e:
             logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
             raise Exception

@@ -16,18 +16,14 @@ def export_data_to_google_cloud_storage(df: DataFrame, **kwargs) -> None:
 
     Docs: https://docs.mage.ai/design/data-loading#googlecloudstorage
     """
-    if len(df) > 0:
-        config_path = path.join(get_repo_path(), 'io_config.yaml')
-        config_profile = 'default'
+    config_path = path.join(get_repo_path(), 'io_config.yaml')
+    config_profile = 'default'
 
-        bucket_name = 'mage_sql'
-        object_key = f"cac_account_level/{kwargs['customer_name']}_{kwargs['query_start_date']}_{kwargs['query_end_date']}.csv"
+    bucket_name = 'your_bucket_name'
+    object_key = 'your_object_key'
 
-        GoogleCloudStorage.with_config(ConfigFileLoader(config_path, config_profile)).export(
-            df,
-            bucket_name,
-            object_key,
-        )
-    else:
-        return print(f"{kwargs['customer_name']} has no values to return! Ending pipeline gracefully.")
-
+    GoogleCloudStorage.with_config(ConfigFileLoader(config_path, config_profile)).export(
+        df,
+        bucket_name,
+        object_key,
+    )

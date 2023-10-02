@@ -54,6 +54,11 @@ def execute_workflow(data, *args, **kwargs):
 
     if r.status_code in {504, 503, 502, 500}:
         try:
+            sleep(600)
+            r = requests.post(
+            workflow_execution_url, 
+            json=post_data, 
+            headers=header_staple)
             workflowExecutionId = r.json()['workflowExecutionId']
             data['workflowExecutionId'] = workflowExecutionId
             return data

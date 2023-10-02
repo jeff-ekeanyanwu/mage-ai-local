@@ -41,6 +41,7 @@ def transform_custom(data, *args, **kwargs):
         headers=header_staple,
     )
     logger = kwargs.get('logger')
+    
 
     try:
         if r.status_code == 200:
@@ -62,6 +63,8 @@ def transform_custom(data, *args, **kwargs):
                     download_url = r.json()["downloadUrls"][0]
                     try:
                         df = pd.read_csv(download_url,on_bad_lines='error')
+                        if 'instanceId' not in df:
+                            df['instanceId'] = kwargs['instanceId']
                         return df
                     except:
                         print(f"{kwargs['customer_name']} has no values to return! OR there is an error in this csv! Ending pipeline gracefully.")
@@ -79,6 +82,8 @@ def transform_custom(data, *args, **kwargs):
                     download_url = r.json()["downloadUrls"][0]
                     try:
                         df = pd.read_csv(download_url,on_bad_lines='error')
+                        if 'instanceId' not in df:
+                            df['instanceId'] = kwargs['instanceId']
                         return df
                     except:
                         print(f"{kwargs['customer_name']} has no values to return! OR there is an error in this csv! Ending pipeline gracefully.")
