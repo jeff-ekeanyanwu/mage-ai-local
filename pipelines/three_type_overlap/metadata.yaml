@@ -1,0 +1,307 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: grey
+  configuration: {}
+  downstream_blocks:
+  - create_amc_dict_global
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: three_type_overlap_sql
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks: []
+  uuid: three_type_overlap_sql
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for amc_metadata_authentication
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_amc_metadata_authentication
+- all_upstream_blocks_executed: true
+  color: teal
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - create_amc_dict_global
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: amc_metadata_authentication
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks: []
+  uuid: amc_metadata_authentication
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for create_amc_dict_global
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_create_amc_dict_global
+- all_upstream_blocks_executed: true
+  color: pink
+  configuration: {}
+  downstream_blocks:
+  - delete_previous_amc_workflow_dynamic
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: create_amc_dict_global
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - amc_metadata_authentication
+  - three_type_overlap_sql
+  uuid: create_amc_dict_global
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for delete_previous_amc_workflow_dynamic
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_delete_previous_amc_workflow_dynamic
+- all_upstream_blocks_executed: true
+  color: teal
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - amc_create_workflow_dynamic
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: delete_previous_amc_workflow_dynamic
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - create_amc_dict_global
+  uuid: delete_previous_amc_workflow_dynamic
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for amc_create_workflow_dynamic
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_amc_create_workflow_dynamic
+- all_upstream_blocks_executed: true
+  color: teal
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - amc_execute_adhoc_workflow_dynamic
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: amc_create_workflow_dynamic
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - delete_previous_amc_workflow_dynamic
+  uuid: amc_create_workflow_dynamic
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for amc_execute_adhoc_workflow_dynamic
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_amc_execute_adhoc_workflow_dynamic
+- all_upstream_blocks_executed: true
+  color: teal
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - amc_retrieve_workflow_download_dynamic
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: amc_execute_adhoc_workflow_dynamic
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - amc_create_workflow_dynamic
+  uuid: amc_execute_adhoc_workflow_dynamic
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for amc_retrieve_workflow_download_dynamic
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_amc_retrieve_workflow_download_dynamic
+- all_upstream_blocks_executed: true
+  color: teal
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - export_to_gcs_three_type_overlap
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: amc_retrieve_workflow_download_dynamic
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - amc_execute_adhoc_workflow_dynamic
+  uuid: amc_retrieve_workflow_download_dynamic
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Documentation for remove_empty_entity
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: documentation_for_remove_empty_entity
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: export_to_gcs_three_type_overlap
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - amc_retrieve_workflow_download_dynamic
+  uuid: export_to_gcs_three_type_overlap
+callbacks: []
+concurrency_config: {}
+conditionals:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: check_if_data_doesnt_exist
+  retry_config: null
+  status: updated
+  timeout: null
+  type: conditional
+  upstream_blocks: []
+  uuid: check_if_data_doesnt_exist
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: check_if_data_exists
+  retry_config: null
+  status: updated
+  timeout: null
+  type: conditional
+  upstream_blocks: []
+  uuid: check_if_data_exists
+created_at: '2023-09-22 02:24:08.228009+00:00'
+data_integration: null
+description: ''
+executor_config: {}
+executor_count: 1
+executor_type: gcp_cloud_run
+extensions: {}
+name: three_type_overlap
+notification_config: {}
+retry_config:
+  delay: 30
+  exponential_backoff: true
+  max_delay: 65
+  retries: 3
+run_pipeline_in_one_process: false
+spark_config: {}
+tags:
+- amc
+- three_type_overlap
+- gcp-cloud-run
+type: python
+updated_at: '2023-10-05 18:35:23'
+uuid: three_type_overlap
+variables:
+  customer_name: Crocs_US
+  instanceId: amcl5g0tpcp
+  query_end_date: '2023-06-30T00:00:00'
+  query_start_date: '2023-04-01T00:00:00'
+widgets: []

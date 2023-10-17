@@ -21,7 +21,7 @@ def export_data_to_google_cloud_storage(df: DataFrame, **kwargs) -> None:
         config_profile = 'default'
 
         bucket_name = 'mage_sql'
-        object_key = f"cac_account_level/{kwargs['customer_name']}_{kwargs['query_start_date']}_{kwargs['query_end_date']}.csv"
+        object_key = f"three_type_overlap/{kwargs['customer_name']}_{kwargs['query_start_date']}_{kwargs['query_end_date']}.csv"
 
         GoogleCloudStorage.with_config(ConfigFileLoader(config_path, config_profile)).export(
             df,

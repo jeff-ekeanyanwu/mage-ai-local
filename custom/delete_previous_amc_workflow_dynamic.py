@@ -56,8 +56,20 @@ def delete_workflow(data, *args, **kwargs):
     
     if r.status_code in {504, 503, 502, 500, 429, 423}:
         logger.warning(f"Error deleting workflow <{full_workflow_name}>. Attempting to retry: {r.text}")
-        data['full_workflow_name'] = full_workflow_name
-        raise Exception
+        try:
+            sleep(600)
+            r = requests.delete(
+            delete_workflow_url, 
+            headers=header_staple)
+            if r.status_code == 200:
+                data['full_workflow_name'] = full_workflow_name
+                return data
+            else:
+                logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status (internal server error). Please investigate. {r.text}")
+                raise Exception
+        except Exception as e:
+            logger.error(f"Workflow <{data['full_workflow_name']}> returned bad status. Please investigate. {r.text}")
+            raise Exception
 
     if r.status_code == 400: # totally fine to error here, just means it's the first time creating the workflow in most cases
         logger.warning(f'Error deleting workflow <{full_workflow_name}>. Attempting to proceed with workflow create: {r.text}')
