@@ -45,7 +45,7 @@ blocks:
   language: python
   name: amc_advertiser_info
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: data_loader
   upstream_blocks:
@@ -67,7 +67,7 @@ blocks:
   upstream_blocks:
   - list_amc_instances
   uuid: amc_instances_to_bq
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks: []
@@ -98,8 +98,10 @@ notification_config: {}
 retry_config: {}
 run_pipeline_in_one_process: false
 spark_config: {}
-tags: []
+tags:
+- amc
+- weekly
 type: python
-updated_at: '2023-09-14 18:19:29'
+updated_at: '2023-10-02 19:35:16'
 uuid: amc_metadata
 widgets: []

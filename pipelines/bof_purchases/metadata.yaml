@@ -176,7 +176,7 @@ data_integration: null
 description: null
 executor_config: {}
 executor_count: 1
-executor_type: null
+executor_type: gcp_cloud_run
 extensions: {}
 name: bof_purchases
 notification_config: {}
@@ -190,8 +190,9 @@ spark_config: {}
 tags:
 - amc
 - bof_purchases
+- gcp-cloud-run
 type: python
-updated_at: '2023-09-23 18:29:17'
+updated_at: '2023-10-03 20:12:36'
 uuid: bof_purchases
 variables:
   customer_name: Crocs_US
